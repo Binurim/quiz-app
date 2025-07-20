@@ -1,11 +1,12 @@
 import Answer from './Answer';
 
-const Question = () => {
+const Question = ({questionD}) => {
+
   return (
     <div>
-      <div className="question">Text of our question</div>
+      <div className="question">{questionD?.question}</div>
       <div className="answers">
-        <Answer />
+        <Answer answerD={questionD}/>
       </div>
     </div>
   );

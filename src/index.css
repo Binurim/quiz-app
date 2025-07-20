@@ -85,12 +85,28 @@ div {
 }
  
 .answer-text {
-  font-weight: 600;
-  display: flex;
+  display: inline-block;
+  padding: 10px 16px;
+  background-color: #f0f0f0;
+  border: 2px solid #ccc;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+  width: 100%;
   align-items: center;
-  margin-left: 20px;
 }
- 
+
+.answer-text:hover {
+  background-color: #e0e0e0;
+  border-color: #999;
+}
+
+.answer-text:active {
+  background-color: #d4d4d4;
+  transform: scale(0.98);
+}
+
 .correct-answer {
   border: 2px solid #1ea55b;
 }
@@ -137,4 +153,11 @@ div {
  
 .disabled-answer {
   pointer-events: none;
+}
+
+button:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
 }
