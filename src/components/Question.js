@@ -1,5 +1,14 @@
+import Answer from './Answer';
+
 const Question = () => {
-    return <div>Question component</div>
-}
+  return (
+    <div>
+      <div className="question">Text of our question</div>
+      <div className="answers">
+        <Answer />
+      </div>
+    </div>
+  );
+};
 
 export default Question;
