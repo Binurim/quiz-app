@@ -9,7 +9,8 @@ const initialState = {
   showResults: false,
   answers: [],
   currentAnswer: '',
-  correctAnswerCount: 0
+  correctAnswerCount: 0,
+  error: null
 };
 
 const reducer = (state, action) => {
@@ -55,6 +56,9 @@ const reducer = (state, action) => {
             ? state.correctAnswerCount + 1
             : state.correctAnswerCount;
         return { ...state, currentAnswer: action.payload, correctAnswerCount };
+      }
+      case 'SERVER_ERROR': {
+        return { ...state, error: action.payload };
       }
       default: {
         return state;

@@ -7,7 +7,7 @@ const Quiz = () => {
   const [quizState, dispatch] = useContext(QuizContext);
 
   useEffect(() => {
-    if (quizState.questions.length > 0) {
+    if (quizState.questions.length > 0 || quizState.error) {
         return;
     }
 
@@ -16,6 +16,8 @@ const Quiz = () => {
       .then((res) => res.json())
       .then((data) => {
         dispatch({ type: 'LOADED_QUESTIONS', payload: data.results });
+      }).catch(err => {
+        dispatch({ type: 'SERVER_ERROR', payload: err.message});
       });
   });
 
@@ -32,6 +34,12 @@ const Quiz = () => {
   return (
     <div>
       <div className="quiz">
+          {quizState.error && (
+          <div className="results">
+            <div>Server error</div>
+            <div>{quizState.error}</div>
+          </div>
+        )}
         {quizState.showResults && (
           <div className="results">
             <div className="congratulations">Congratulations</div>
