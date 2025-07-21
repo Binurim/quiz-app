@@ -1,25 +1,34 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import Question from './Question';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
+const initialState = {
+    currentQuetionIndex: 0,
+    questions: []
+};
+
+const reducer = (state, action) => {
+    if (action.type === 'NEXT_QUESTION') {
+        return { ...state, currentQuetionIndex: state.currentQuetionIndex + 1 };
+    } else if (action.type === 'PREVIOUS_QUESTION') {
+        return { ...state, currentQuetionIndex: state.currentQuetionIndex - 1 };
+    }
+    return state;
+}
+
 const Quiz = ({questionsData}) => {
 
-const [currentQuetionIndex, setCurrentQuetionIndex] = useState(0);    
-const [questions, setQuestions] = useState([]);     
-
-
-useEffect(() => {
-  setQuestions(questionsData);
-}, [questionsData]);
+const [state, dispatch] = useReducer(reducer, initialState); 
+const [currentQuetionIndex, setCurrentQuetionIndex] = useState(0);
 
 const handleNextQuestion = () => {
-  setCurrentQuetionIndex(currentQuetionIndex + 1);
+  dispatch({type: 'NEXT_QUESTION'});
 };
 
 const handlePreviousQuestion = () => {
   if (currentQuetionIndex > 0) {
-    setCurrentQuetionIndex(currentQuetionIndex - 1);
+    dispatch({type: 'PREVIOUS_QUESTION'});
   }
 };
 
@@ -27,11 +36,11 @@ const handlePreviousQuestion = () => {
     <div>
       <div className="quiz">
         <div className="score">
-          Question {currentQuetionIndex +1}/{questions.length}
+          Question {currentQuetionIndex +1}/{state.questions.length}
         </div>
-        {questions.length > 0 && questions[currentQuetionIndex] && (
+        {state.questions.length > 0 && state.questions[currentQuetionIndex] && (
 
-        <Question questionD={questions[currentQuetionIndex]}/>
+        <Question questionD={state.questions[currentQuetionIndex]}/>
         )}
         <div className="row">
           <button
@@ -40,7 +49,7 @@ const handlePreviousQuestion = () => {
             onClick={handlePreviousQuestion}
             disabled={
               currentQuetionIndex === 0 ||
-              currentQuetionIndex > questions.length -1
+              currentQuetionIndex > state.questions.length -1
             }
           >
             Previous Question
@@ -49,7 +58,7 @@ const handlePreviousQuestion = () => {
             className="next-button"
             type="button"
             onClick={handleNextQuestion}
-            disabled={currentQuetionIndex === questions.length -1}
+            disabled={currentQuetionIndex === state.questions.length -1}
           >
             Next Question
           </button>
