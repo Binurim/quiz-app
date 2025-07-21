@@ -1,14 +1,17 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useState, useMemo, useContext, useEffect } from 'react';
+import { QuizContext } from '../context/QuizContext';
 
-const Answer = ({ answerD }) => {
+const Answer = () => {
   const answerLetter = ['A', 'B', 'C', 'D'];
 
   const [showAnswers, setShowAnswers] = useState(false);
+  const [quizState] = useContext(QuizContext);
 
   const allAnswers = useMemo(() => {
-    const combined = [...answerD.incorrectAnswers, answerD.correctAnswer];
+    const currentQuestion = quizState.questions[quizState.currentQuetionIndex];
+    const combined = [...currentQuestion.incorrectAnswers, currentQuestion.correctAnswer];
     return combined.sort(() => Math.random() - 0.5);
-  }, [answerD]);
+  }, [quizState]);
 
   const handleAnswer = () => {
     setShowAnswers(true);
@@ -16,7 +19,7 @@ const Answer = ({ answerD }) => {
 
   useEffect(() => {
     setShowAnswers(false);
-  }, [answerD]);
+  }, [quizState]);
 
   return (
     <>
@@ -24,7 +27,7 @@ const Answer = ({ answerD }) => {
         let className = 'answer'; // base class
 
         if (showAnswers) {
-          if (answer === answerD.correctAnswer) {
+          if (answer ===  quizState.questions[quizState.currentQuetionIndex].correctAnswer) {
             className += ' correct-answer';
           } else {
             className += ' wrong-answer';

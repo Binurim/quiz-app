@@ -28,6 +28,7 @@ const Quiz = () => {
             </div>
             <button
               className="next-button"
+              type="button"
               onClick={() => dispatch({ type: 'RESTART' })}
             >
               Restart
@@ -43,7 +44,7 @@ const Quiz = () => {
             </div>
             {quizState.questions.length > 0 && <Question />}
             <div className="row">
-              <button
+              {/* <button
                 className="next-button"
                 type="button"
                 onClick={handlePreviousQuestion}
@@ -53,19 +54,19 @@ const Quiz = () => {
                 }
               >
                 Previous Question
-              </button>
+              </button> */}
               <button
                 className="next-button"
                 type="button"
                 onClick={handleNextQuestion}
-                disabled={
-                  quizState.currentQuetionIndex ===
-                  quizState.questions.length - 1
-                }
+                // disabled={
+                //   quizState.currentQuetionIndex ===
+                //   quizState.questions.length - 1
+                // }
               >
                 Next Question
               </button>
-              <button
+              {/* <button
                 className="next-button"
                 type="button"
                 onClick={() => dispatch({ type: 'SUBMIT' })}
@@ -75,7 +76,7 @@ const Quiz = () => {
                 }
               >
                 Submit
-              </button>
+              </button> */}
             </div>
           </div>
         )}
