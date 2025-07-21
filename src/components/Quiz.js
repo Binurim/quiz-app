@@ -1,68 +1,84 @@
-import { useState, useEffect, useReducer } from 'react';
+import { useContext } from 'react';
 import Question from './Question';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { QuizContext } from '../context/QuizContext';
 
+const Quiz = () => {
+  const [quizState, dispatch] = useContext(QuizContext);
 
-const initialState = {
-    currentQuetionIndex: 0,
-    questions: []
-};
+  const handleNextQuestion = () => {
+    dispatch({ type: 'NEXT_QUESTION' });
+  };
 
-const reducer = (state, action) => {
-    if (action.type === 'NEXT_QUESTION') {
-        return { ...state, currentQuetionIndex: state.currentQuetionIndex + 1 };
-    } else if (action.type === 'PREVIOUS_QUESTION') {
-        return { ...state, currentQuetionIndex: state.currentQuetionIndex - 1 };
+  const handlePreviousQuestion = () => {
+    if (quizState.currentQuetionIndex > 0) {
+      dispatch({ type: 'PREVIOUS_QUESTION' });
     }
-    return state;
-}
-
-const Quiz = ({questionsData}) => {
-
-const [state, dispatch] = useReducer(reducer, initialState); 
-const [currentQuetionIndex, setCurrentQuetionIndex] = useState(0);
-
-const handleNextQuestion = () => {
-  dispatch({type: 'NEXT_QUESTION'});
-};
-
-const handlePreviousQuestion = () => {
-  if (currentQuetionIndex > 0) {
-    dispatch({type: 'PREVIOUS_QUESTION'});
-  }
-};
+  };
 
   return (
     <div>
       <div className="quiz">
-        <div className="score">
-          Question {currentQuetionIndex +1}/{state.questions.length}
-        </div>
-        {state.questions.length > 0 && state.questions[currentQuetionIndex] && (
-
-        <Question questionD={state.questions[currentQuetionIndex]}/>
+        {quizState.showResults && (
+          <div className="results">
+            <div className="congratulations">Congratulations</div>
+            <div className="results-info">
+              <div>You have completed the quiz</div>
+              <div>You've got 4 of {quizState.questions.length}</div>
+            </div>
+            <button
+              className="next-button"
+              onClick={() => dispatch({ type: 'RESTART' })}
+            >
+              Restart
+            </button>
+          </div>
         )}
-        <div className="row">
-          <button
-            className="next-button"
-            type="button"
-            onClick={handlePreviousQuestion}
-            disabled={
-              currentQuetionIndex === 0 ||
-              currentQuetionIndex > state.questions.length -1
-            }
-          >
-            Previous Question
-          </button>
-          <button
-            className="next-button"
-            type="button"
-            onClick={handleNextQuestion}
-            disabled={currentQuetionIndex === state.questions.length -1}
-          >
-            Next Question
-          </button>
-        </div>
+
+        {!quizState.showResults && (
+          <div>
+            <div className="score">
+              Question {quizState.currentQuetionIndex + 1}/
+              {quizState.questions.length}
+            </div>
+            {quizState.questions.length > 0 && <Question />}
+            <div className="row">
+              <button
+                className="next-button"
+                type="button"
+                onClick={handlePreviousQuestion}
+                disabled={
+                  quizState.currentQuetionIndex === 0 ||
+                  quizState.currentQuetionIndex > quizState.questions.length - 1
+                }
+              >
+                Previous Question
+              </button>
+              <button
+                className="next-button"
+                type="button"
+                onClick={handleNextQuestion}
+                disabled={
+                  quizState.currentQuetionIndex ===
+                  quizState.questions.length - 1
+                }
+              >
+                Next Question
+              </button>
+              <button
+                className="next-button"
+                type="button"
+                onClick={() => dispatch({ type: 'SUBMIT' })}
+                disabled={
+                  quizState.currentQuetionIndex !==
+                  quizState.questions.length - 1
+                }
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

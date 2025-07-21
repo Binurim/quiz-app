@@ -2,12 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Quiz from './components/Quiz';
 import './index.css';
-import questionsData from './data';
+import { QuizProvider } from './context/QuizContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Quiz questionsData={questionsData}/>
+    <QuizProvider>
+      <Quiz/>
+    </QuizProvider>
   </React.StrictMode>
 );
 
