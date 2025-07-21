@@ -10,11 +10,11 @@ const Quiz = () => {
     dispatch({ type: 'NEXT_QUESTION' });
   };
 
-  const handlePreviousQuestion = () => {
-    if (quizState.currentQuetionIndex > 0) {
-      dispatch({ type: 'PREVIOUS_QUESTION' });
-    }
-  };
+//   const handlePreviousQuestion = () => {
+//     if (quizState.currentQuetionIndex > 0) {
+//       dispatch({ type: 'PREVIOUS_QUESTION' });
+//     }
+//   };
 
   return (
     <div>
@@ -24,7 +24,7 @@ const Quiz = () => {
             <div className="congratulations">Congratulations</div>
             <div className="results-info">
               <div>You have completed the quiz</div>
-              <div>You've got 4 of {quizState.questions.length}</div>
+              <div>You've got {quizState.correctAnswerCount} of {quizState.questions.length}</div>
             </div>
             <button
               className="next-button"
