@@ -1,21 +1,28 @@
 import { createContext, useReducer } from 'react';
 // import data from '../data';
-import questions from '../data';
-import { shuffleAnswers } from '../helpers';
+import { normalizeQuestions, shuffleAnswers } from '../helpers';
 
 const initialState = {
   currentQuetionIndex: 0,
-  questions,
+  questions: [],
   // questions: [data]
   showResults: false,
-  answers: shuffleAnswers(questions[0]),
+  answers: [],
   currentAnswer: '',
   correctAnswerCount: 0
 };
 
 const reducer = (state, action) => {
     switch (action.type) {
-        case 'NEXT_QUESTION': {
+      case 'LOADED_QUESTIONS': {
+        const normalizeQuestionsArr = normalizeQuestions(action.payload);
+        return {
+          ...state,
+          questions: normalizeQuestionsArr,
+          answers: shuffleAnswers(normalizeQuestionsArr[0]),
+        };
+      }
+      case 'NEXT_QUESTION': {
         const showResults =
           state.currentQuetionIndex === state.questions.length - 1;
         const currentQuetionIndex = showResults
@@ -24,7 +31,13 @@ const reducer = (state, action) => {
         const answers = showResults
           ? []
           : shuffleAnswers(state.questions[currentQuetionIndex]);
-        return { ...state, currentQuetionIndex, showResults, answers, currentAnswer:'' };
+        return {
+          ...state,
+          currentQuetionIndex,
+          showResults,
+          answers,
+          currentAnswer: '',
+        };
       }
       case 'PREVIOUS_QUESTION': {
         return { ...state, currentQuetionIndex: state.currentQuetionIndex - 1 };
@@ -36,8 +49,12 @@ const reducer = (state, action) => {
         return { ...state, showResults: true };
       }
       case 'SELECT_ANSWER': {
-        const correctAnswerCount = action.payload === state.questions[state.currentQuetionIndex].correctAnswer ? state.correctAnswerCount + 1 : state.correctAnswerCount;
-        return { ...state, currentAnswer: action.payload, correctAnswerCount};
+        const correctAnswerCount =
+          action.payload ===
+          state.questions[state.currentQuetionIndex].correctAnswer
+            ? state.correctAnswerCount + 1
+            : state.correctAnswerCount;
+        return { ...state, currentAnswer: action.payload, correctAnswerCount };
       }
       default: {
         return state;
